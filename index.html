@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ida · 赛博大脑 · AI 产品实战</title>
+    <meta
+      name="description"
+      content="AI自动化、工业级、具备智性审美的内容生产系统 — UX 设计与 AI 工程实战复盘。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bronze: {
+                soft: "#e8e4dc",
+                muted: "#9c8b76",
+                deep: "#6b5e4f",
+              },
+            },
+            fontFamily: {
+              sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
+              mono: ['"IBM Plex Mono"', "ui-monospace", "monospace"],
+            },
+            boxShadow: {
+              lift: "0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -6px rgba(15, 23, 42, 0.08)",
+              liftSm: "0 1px 2px rgba(15, 23, 42, 0.03), 0 4px 16px -4px rgba(15, 23, 42, 0.06)",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* 具身感：极淡纸感噪点（亮色下仅细看可察） */
+      .grain-light {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.045;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans font-light text-slate-800 antialiased bg-stone-50 min-h-screen selection:bg-blue-950/10 selection:text-blue-950"
+  >
+    <div class="grain-light" aria-hidden="true"></div>
+
+    <!-- 背景：极淡冷雾，保持空气感 -->
+    <div
+      class="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_85%_55%_at_50%_-15%,rgba(30,58,138,0.06),transparent),radial-gradient(ellipse_50%_45%_at_100%_0%,rgba(148,163,184,0.07),transparent)]"
+      aria-hidden="true"
+    ></div>
+
+    <header
+      class="relative border-b border-slate-200/70 bg-stone-50/75 backdrop-blur-md"
+    >
+      <div
+        class="mx-auto flex max-w-5xl flex-col gap-6 px-5 py-16 sm:px-8 sm:py-24 md:flex-row md:items-end md:justify-between"
+      >
+        <div class="max-w-xl space-y-5">
+          <p
+            class="font-mono text-[11px] uppercase tracking-[0.28em] text-slate-500"
+          >
+            UX × AI Product · Case Study
+          </p>
+          <h1
+            class="text-3xl font-medium tracking-tight text-blue-950 sm:text-4xl md:text-[2.75rem] md:leading-[1.12]"
+          >
+            赛博大脑<br />
+            <span class="text-slate-600 font-light"
+              >智性审美的内容生产车间</span
+            >
+          </h1>
+          <p class="max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
+            AI自动化、工业级、具备智性审美的人机协作系统。在碎片化算法时代，用工程流守护长文深度与具身观察。
+          </p>
+        </div>
+        <div class="shrink-0 text-left md:text-right">
+          <p class="font-mono text-xs text-blue-950/80">Ida 流动室</p>
+          <p class="mt-1 text-sm text-slate-600">产品设计与系统架构</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="relative mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
+      <!-- Project Overview：四层结构 · 全居中 -->
+      <section class="mb-20 sm:mb-24" aria-labelledby="overview-heading">
+        <h2
+          id="overview-heading"
+          class="mb-8 font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500"
+        >
+          Project Overview
+        </h2>
+        <div
+          class="rounded-2xl border border-slate-200/60 bg-slate-50 px-6 py-12 sm:px-12 sm:py-14 lg:px-16"
+        >
+          <div
+            class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4 lg:gap-12"
+          >
+            <!-- 1 · Context -->
+            <article
+              class="flex h-full flex-col items-center text-center rounded-xl border border-slate-200/70 bg-white px-8 py-10 shadow-liftSm sm:px-9 sm:py-11"
+            >
+              <div class="mb-6 flex justify-center text-blue-950" aria-hidden="true">
+                <svg
+                  class="h-7 w-7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <p class="text-xs font-medium tracking-wide text-slate-500">
+                Context / 定义
+              </p>
+              <h3
+                class="mt-4 text-xl font-bold leading-snug tracking-tight text-blue-950"
+              >
+                内容工程化实验
+              </h3>
+              <p
+                class="mt-3 max-w-[16.5rem] text-sm leading-relaxed text-slate-600"
+              >
+                基于全链路生产测试的 AI 写作实验。
+              </p>
+            </article>
+
+            <!-- 2 · Challenge -->
+            <article
+              class="flex h-full flex-col items-center text-center rounded-xl border border-slate-200/70 bg-white px-8 py-10 shadow-liftSm sm:px-9 sm:py-11"
+            >
+              <div class="mb-6 flex justify-center text-blue-950" aria-hidden="true">
+                <svg
+                  class="h-7 w-7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v4" />
+                  <path d="M12 16h.01" />
+                </svg>
+              </div>
+              <p class="text-xs font-medium tracking-wide text-slate-500">
+                Challenge / 痛点
+              </p>
+              <h3
+                class="mt-4 text-xl font-bold leading-snug tracking-tight text-blue-950"
+              >
+                冰冷说教感
+              </h3>
+              <p
+                class="mt-3 max-w-[16.5rem] text-sm leading-relaxed text-slate-600"
+              >
+                传统 AI 内容导致的小红书互动低迷。
+              </p>
+            </article>
+
+            <!-- 3 · Solution -->
+            <article
+              class="flex h-full flex-col items-center text-center rounded-xl border border-slate-200/70 bg-white px-8 py-10 shadow-liftSm sm:px-9 sm:py-11"
+            >
+              <div class="mb-6 flex justify-center text-blue-950" aria-hidden="true">
+                <svg
+                  class="h-7 w-7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <rect width="8" height="8" x="3" y="3" rx="2" />
+                  <rect width="8" height="8" x="13" y="13" rx="2" />
+                  <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+                </svg>
+              </div>
+              <p class="text-xs font-medium tracking-wide text-slate-500">
+                Solution / 方案
+              </p>
+              <h3
+                class="mt-4 text-xl font-bold leading-snug tracking-tight text-blue-950"
+              >
+                代理工作流
+              </h3>
+              <p
+                class="mt-3 max-w-[16.5rem] text-sm leading-relaxed text-slate-600"
+              >
+                注入具身感 SOP 的智能体自动化生产。
+              </p>
+            </article>
+
+            <!-- 4 · Gains -->
+            <article
+              class="flex h-full flex-col items-center text-center rounded-xl border border-slate-200/70 bg-white px-8 py-10 shadow-liftSm sm:px-9 sm:py-11"
+            >
+              <div class="mb-6 flex justify-center text-blue-950" aria-hidden="true">
+                <svg
+                  class="h-7 w-7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                  <polyline points="16 7 22 7 22 13" />
+                </svg>
+              </div>
+              <p class="text-xs font-medium tracking-wide text-slate-500">
+                Gains / 增益
+              </p>
+              <h3
+                class="mt-4 text-xl font-bold leading-snug tracking-tight text-blue-950"
+              >
+                15x &amp; 15%
+              </h3>
+              <p
+                class="mt-3 max-w-[16.5rem] text-sm leading-relaxed text-slate-600"
+              >
+                效能跨越与互动质量的同步增长。
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 哲学 -->
+      <section class="mb-24 sm:mb-32">
+        <h2
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500 mb-10"
+        >
+          01 — 系统设计哲学
+        </h2>
+        <div class="grid gap-12 md:grid-cols-2 md:gap-16">
+          <div class="space-y-6">
+            <h3 class="text-lg font-medium text-blue-950">
+              从「三大黑洞」到可工程化的创作
+            </h3>
+            <ul class="space-y-4 text-sm leading-relaxed text-slate-600">
+              <li class="border-l border-slate-200 pl-4">
+                <span class="text-slate-800 font-normal">灵感与算法偏见</span>
+                — 信息茧房与未经调优的「导师味」复读，难以形成穿透力。
+              </li>
+              <li class="border-l border-slate-200 pl-4">
+                <span class="text-slate-800 font-normal">审美的边际递减</span>
+                — 高频产出与文字肌理、审美锐度的天然矛盾。
+              </li>
+              <li class="border-l border-slate-200 pl-4">
+                <span class="text-slate-800 font-normal">情绪耗散</span>
+                — 从思考者滑向「数据奴隶」的无力感。
+              </li>
+            </ul>
+          </div>
+          <div
+            class="rounded-sm border border-slate-200/80 bg-white p-8 shadow-liftSm"
+          >
+            <p class="text-xs font-mono uppercase tracking-wider text-slate-500 mb-4">
+              三条基石原则
+            </p>
+            <dl class="space-y-5 text-sm text-slate-600">
+              <div>
+                <dt class="font-medium text-blue-950">模块化 Modular</dt>
+                <dd class="mt-1 leading-relaxed">
+                  代码流与内容 SOP 解耦，文感可像驱动一样独立迭代。
+                </dd>
+              </div>
+              <div>
+                <dt class="font-medium text-blue-950">数据驱动 Data-Driven</dt>
+                <dd class="mt-1 leading-relaxed">
+                  热点聚类对抗个人偏见，只在确定性流量土壤上播种。
+                </dd>
+              </div>
+              <div>
+                <dt class="font-medium text-blue-950">主体性 Human-in-the-loop</dt>
+                <dd class="mt-1 leading-relaxed">
+                  AI 处理信息与扩写，人作最高检阅官与感官干预者。
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <p
+          class="mt-12 max-w-2xl text-sm italic leading-relaxed text-slate-600 border-t border-slate-200/80 pt-10"
+        >
+          引入「感官锚点」后，长文互动率从个位数升至约
+          <span class="not-italic font-medium text-blue-950">15%</span>
+          （实验：191 阅 / 19 赞 / 11 藏）— 逻辑骨架与感性血肉的平衡点可被量化。
+        </p>
+      </section>
+
+      <!-- 架构速写 -->
+      <section class="mb-24 sm:mb-32">
+        <h2
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500 mb-10"
+        >
+          02 — 系统架构
+        </h2>
+        <div
+          class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-sm text-slate-600"
+        >
+          <div
+            class="group rounded-sm border border-slate-200/80 bg-white p-6 shadow-liftSm transition-shadow hover:shadow-lift"
+          >
+            <p class="font-mono text-[10px] text-slate-500">ENGINE</p>
+            <p class="mt-3 font-medium text-blue-950">Gemini 3 Flash</p>
+            <p class="mt-2 text-xs leading-relaxed">
+              选题决策至深度扩写，长上下文高性价比。
+            </p>
+          </div>
+          <div
+            class="group rounded-sm border border-slate-200/80 bg-white p-6 shadow-liftSm transition-shadow hover:shadow-lift"
+          >
+            <p class="font-mono text-[10px] text-slate-500">GLUE</p>
+            <p class="mt-3 font-medium text-blue-950">Python 3.x</p>
+            <p class="mt-2 text-xs leading-relaxed">
+              调度数据流、API 与文件系统。
+            </p>
+          </div>
+          <div
+            class="group rounded-sm border border-slate-200/80 bg-white p-6 shadow-liftSm transition-shadow hover:shadow-lift"
+          >
+            <p class="font-mono text-[10px] text-slate-500">LIMB</p>
+            <p class="mt-3 font-medium text-blue-950">Playwright</p>
+            <p class="mt-2 text-xs leading-relaxed">
+              富文本「幽灵打字」、全要素装填。
+            </p>
+          </div>
+          <div
+            class="group rounded-sm border border-slate-200/80 bg-white p-6 shadow-liftSm transition-shadow hover:shadow-lift"
+          >
+            <p class="font-mono text-[10px] text-slate-500">RHYTHM</p>
+            <p class="mt-3 font-medium text-blue-950">Crontab</p>
+            <p class="mt-2 text-xs leading-relaxed">
+              每日固定抓取与生产节奏。
+            </p>
+          </div>
+        </div>
+        <p class="mt-8 font-mono text-xs text-slate-500">
+          ida_gather.py → ida_autopilot.py → ida_poster.py · SOP 矩阵约束审美
+        </p>
+      </section>
+
+      <!-- ROI 数据卡片 -->
+      <section class="mb-24 sm:mb-32">
+        <h2
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500 mb-4"
+        >
+          03 — 价值验证 · ROI
+        </h2>
+        <p class="mb-12 max-w-xl text-sm text-slate-600 leading-relaxed">
+          同平台实测对比：<span class="text-slate-800 font-normal">重塑人生系列</span>（传统
+          AI 味）与 <span class="text-slate-800 font-normal">边界感系列</span>（赛博大脑
+          V4.7）。高深度长文 + 呼吸感排版 + 感官叙事仍可撬动高净值关注。
+        </p>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- 互动率 主卡片 -->
+          <article
+            class="relative overflow-hidden rounded-sm border border-slate-200/80 bg-white p-8 shadow-lift sm:col-span-2 lg:col-span-1 lg:row-span-2"
+          >
+            <div
+              class="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-slate-200/40 blur-2xl"
+              aria-hidden="true"
+            ></div>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+              Engagement — 核心指标
+            </p>
+            <p class="mt-6 text-4xl font-medium tabular-nums tracking-tight text-blue-950 sm:text-5xl">
+              ~15.7%
+            </p>
+            <p class="mt-2 text-sm text-slate-600">边界感系列互动率（高质量池内）</p>
+            <div class="mt-8 flex items-end gap-6">
+              <div class="flex flex-col gap-2">
+                <span class="font-mono text-[10px] text-slate-500">对照 A</span>
+                <div
+                  class="h-24 w-8 rounded-sm bg-slate-100 relative overflow-hidden ring-1 ring-slate-200/60"
+                  title="约 26.6% 小基数"
+                >
+                  <div
+                    class="absolute bottom-0 left-0 right-0 h-[35%] rounded-sm bg-slate-400/70"
+                  ></div>
+                </div>
+                <span class="text-xs text-slate-600">~26.6%</span>
+                <span class="text-[10px] text-slate-500">小基数波动</span>
+              </div>
+              <div class="flex flex-col gap-2">
+                <span class="font-mono text-[10px] text-blue-950/80">V4.7</span>
+                <div
+                  class="h-24 w-8 rounded-sm bg-slate-100 relative overflow-hidden ring-1 ring-slate-200/60"
+                >
+                  <div
+                    class="absolute bottom-0 left-0 right-0 h-[78%] rounded-sm bg-gradient-to-t from-blue-950 to-slate-600"
+                  ></div>
+                </div>
+                <span class="text-xs text-blue-950 font-medium">~15.7%</span>
+                <span class="text-[10px] text-slate-500">稳定进池</span>
+              </div>
+            </div>
+            <p class="mt-6 border-t border-slate-200/80 pt-4 text-xs leading-relaxed text-slate-600">
+              条形为相对高度示意：V4.7 强调「可复现的高互动质量」，而非单点虚荣比率。
+            </p>
+          </article>
+
+          <!-- 曝光 -->
+          <article
+            class="rounded-sm border border-slate-200/80 bg-white p-7 shadow-liftSm"
+          >
+            <p class="font-mono text-[10px] text-slate-500">IMPRESSIONS</p>
+            <div class="mt-4 flex items-baseline justify-between gap-2">
+              <span class="text-2xl font-medium tabular-nums text-blue-950">191</span>
+              <span
+                class="rounded-sm bg-bronze-soft px-2 py-0.5 font-mono text-xs font-medium text-bronze-deep"
+                >+1173%</span
+              >
+            </div>
+            <p class="mt-2 text-xs text-slate-600">对照：15 次 · 边界感系列</p>
+            <div class="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div
+                class="h-full w-[92%] rounded-full bg-gradient-to-r from-slate-400 via-slate-500 to-blue-950"
+              ></div>
+            </div>
+          </article>
+
+          <!-- 点赞 -->
+          <article
+            class="rounded-sm border border-slate-200/80 bg-white p-7 shadow-liftSm"
+          >
+            <p class="font-mono text-[10px] text-slate-500">LIKES</p>
+            <div class="mt-4 flex items-baseline justify-between gap-2">
+              <span class="text-2xl font-medium tabular-nums text-blue-950">19</span>
+              <span
+                class="rounded-sm bg-bronze-soft px-2 py-0.5 font-mono text-xs font-medium text-bronze-deep"
+                >+533%</span
+              >
+            </div>
+            <p class="mt-2 text-xs text-slate-600">对照：3 次</p>
+            <div class="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div
+                class="h-full w-[86%] rounded-full bg-gradient-to-r from-slate-400 via-slate-500 to-blue-950"
+              ></div>
+            </div>
+          </article>
+
+          <!-- 收藏 -->
+          <article
+            class="rounded-sm border border-slate-200/80 bg-white p-7 shadow-liftSm sm:col-span-2 lg:col-span-2"
+          >
+            <p class="font-mono text-[10px] text-slate-500">SAVES</p>
+            <div class="mt-4 flex items-baseline justify-between gap-2">
+              <span class="text-2xl font-medium tabular-nums text-blue-950">11</span>
+              <span
+                class="rounded-sm bg-bronze-soft px-2 py-0.5 font-mono text-xs font-medium text-bronze-deep"
+                >+1000%</span
+              >
+            </div>
+            <p class="mt-2 text-xs text-slate-600">对照：1 次 · 收藏价值跃迁</p>
+            <div class="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div
+                class="h-full w-full max-w-[95%] rounded-full bg-gradient-to-r from-slate-400 via-slate-500 to-blue-950"
+              ></div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 效率对比条 -->
+        <div
+          class="mt-10 rounded-sm border border-slate-200/80 bg-white p-8 shadow-lift sm:p-10"
+        >
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+            生产效率
+          </p>
+          <div
+            class="mt-4 grid gap-8 sm:grid-cols-2 sm:gap-12 text-sm text-slate-600"
+          >
+            <div>
+              <p class="text-slate-800 font-normal">传统人工 · 深度长文</p>
+              <p class="mt-2 text-3xl font-medium tabular-nums text-slate-500">~5 h</p>
+              <p class="mt-1 text-xs">单篇 2000 字+ 全流程</p>
+            </div>
+            <div>
+              <p class="text-slate-800 font-normal">赛博链路 · 检阅 + 终审</p>
+              <p class="mt-2 text-3xl font-medium tabular-nums text-blue-950">
+                ~20 min
+              </p>
+              <p class="mt-1 text-xs">约 15× 效能提升（文档口径）</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 文感迭代实验：导师味 vs 感官锚点（素材：Perfect_简报推荐选题 10.55.10.md） -->
+      <section class="mb-24 sm:mb-32">
+        <h2
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-600 mb-2"
+        >
+          04 — 文感迭代实验 · Sensory Comparison
+        </h2>
+        <p class="mb-10 max-w-2xl text-sm text-slate-600 leading-relaxed">
+          同一选题链路下的 A/B：左侧为未受 SOP 约束的「模板化输出」；右侧正文摘录自
+          <span class="font-mono text-[11px] text-slate-500"
+            >Perfect_简报推荐选题 10.55.10.md</span
+          >
+          ，经流动室精修后直接呈现——无关自我指涉，只保留身体与时间里的刺点。
+        </p>
+        <div class="grid gap-5 md:grid-cols-2 md:gap-6 md:items-stretch">
+          <!-- 左：Baseline / 说教 AI -->
+          <article
+            class="flex h-full flex-col rounded-sm border border-slate-200/90 bg-slate-50/80 p-7 shadow-liftSm ring-1 ring-slate-100/80"
+          >
+            <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500">
+              Baseline
+            </p>
+            <div class="mt-3">
+              <h3 class="text-lg font-medium leading-snug text-slate-700">
+                AI-Generated Draft
+              </h3>
+              <p class="mt-1 text-xs text-slate-500">导师感说教</p>
+            </div>
+            <div
+              class="mt-6 flex flex-1 flex-col space-y-4 text-base leading-relaxed text-slate-700"
+            >
+              <p>
+                建立心理边界是一个多维度的过程。首先，我们需要通过认知框架来识别入侵；其次，采取非暴力沟通。Ida
+                认为，只要坚持以下三个步骤：1. 觉察；2. 命名；3.
+                重构，你就能获得真正的成长。
+              </p>
+            </div>
+            <p class="mt-6 text-xs text-slate-400">
+              框架堆砌 · 步骤清单 · 结论先行
+            </p>
+          </article>
+
+          <!-- 右：Ida Flow / 具身正文 -->
+          <article
+            class="flex h-full flex-col rounded-sm border border-slate-200/80 bg-white p-7 shadow-lift ring-1 ring-slate-100/60"
+          >
+            <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-slate-500">
+              Ida Flow
+            </p>
+            <div class="mt-3">
+              <h3 class="text-lg font-medium leading-snug text-blue-950">
+                Ida-Flowed Refinement
+              </h3>
+              <p class="mt-1 text-xs text-slate-500">具身叙事感</p>
+            </div>
+            <div
+              class="mt-6 flex flex-1 flex-col space-y-4 text-base leading-relaxed text-slate-700"
+            >
+              <p>
+                深夜十点，玄关处传来钥匙插入锁孔、机械弹子咬合的微弱脆响。在那一秒，你的脊背瞬间僵直，原本松弛的肩膀不自觉地向耳朵耸起。这不是在自己家，这更像是在某个高压副本里屏息服役。
+              </p>
+              <p>
+                再昂贵的香薰，都只是为了粉饰一个精致的囚牢。真正的自由不是抵达远方，而是拿回在那一平米课桌前拒绝被入侵的权利。
+              </p>
+            </div>
+            <p class="mt-6 text-xs text-slate-400">
+              感官锚点 · 具身叙事 · 拒绝侵入
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 结语 -->
+      <section class="border-t border-slate-200/80 pt-16">
+        <h2
+          class="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500 mb-8"
+        >
+          愿景
+        </h2>
+        <p class="max-w-2xl text-sm leading-relaxed text-slate-600">
+          消灭面对白纸的焦虑；用趋势雷达对抗认知偏见；用工程守护审美深度。下一步：向
+          B 端场景延续，探索个体与小企业可复用的「降维」能力。
+        </p>
+      </section>
+    </main>
+
+    <footer
+      class="relative border-t border-slate-200/80 py-10 text-center bg-stone-50/50"
+    >
+      <p class="font-mono text-[10px] text-slate-400">
+        Ida Portfolio · Case Study V2.0 Light · Built with Tailwind
+      </p>
+    </footer>
+  </body>
+</html>
